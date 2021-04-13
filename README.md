@@ -2,11 +2,11 @@
 
 Manage Github stars with ease based on multidimensional table!
 
+A simple way to re-implement `https://app.astralapp.com/`
+
 ![raw data](./1.png)
 
 ![filter data](./2.png)
-
-A simple way to re-implement `https://app.astralapp.com/`
 
 # Setup
 
@@ -29,5 +29,5 @@ python stars.py
 
 # Todo
 
-- [ ] Replace `Vika` with [Airtable](https://airtable.com/)
 - [x] `stars.py` supporting transfer data from `https://app.astralapp.com/` to this
+- [ ] Support [Airtable](https://airtable.com/) as back up of `Vika`
