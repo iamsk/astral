@@ -1,3 +1,4 @@
+import json
 from collections import Counter
 import requests
 from vika import Vika
@@ -17,9 +18,10 @@ def get_userid_by_name(name):
 
 
 def _filter(record):
+    print(record['html_url'])
     info = benedict(record).subset(
-        keys=['name', 'description', 'html_url', 'updated_at', 'stargazers_count', 'language',
-              'id', 'created_at', 'forks_count'])
+        keys=['name', 'description', 'html_url', 'pushed_at', 'stargazers_count', 'language',
+              'id', 'created_at', 'forks_count', 'archived'])
     return info
 
 
@@ -35,6 +37,7 @@ def get_stars():
         except Exception as e:
             print(e)
             continue
+    # import pdb;pdb.set_trace()
     return stars
 
 
@@ -63,4 +66,20 @@ def clean():
             record.delete()
 
 
+def update_from_astral():
+    # export from https://app.astralapp.com/
+    filename = 'astral_data_202104.json'
+    data = json.load(open(filename))
+    for k, v in data.items():
+        repo_id = v['repo_id']
+        print(repo_id)
+        try:
+            record = datasheet.records.get(id=repo_id)
+            record.tags = ','.join([tag['name'] for tag in v['tags']])
+            record.save()
+        except:
+            continue
+
+
 save()
+# update_from_astral()
