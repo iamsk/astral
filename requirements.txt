@@ -1,4 +1,4 @@
 PyGithub
-benedict
+python-benedict
 vika
 requests

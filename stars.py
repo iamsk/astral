@@ -49,10 +49,13 @@ def save():
     delete_ids = set(vika_star_ids) - set(star_ids)
     records = [_filter(star) for star in stars if star['id'] in new_ids]
     # add new stars
+    print('creating!')
     datasheet.records.bulk_create(records)
     # delete un-stars
+    print('deleting!')
     for _id in delete_ids:
         record = datasheet.records.get(id=_id)
+        print(record['html_url'])
         record.delete()
 
 
