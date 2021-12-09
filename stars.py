@@ -1,8 +1,9 @@
 import json
-from collections import Counter
+import time
 import requests
-from vika import Vika
+from collections import Counter
 from benedict import benedict
+from vika import Vika
 from github import Github
 
 from conf import GITHUB_TOKEN, VIKA_TOKEN, VIKA_TABLE, GITHUB_USERNAME
@@ -50,7 +51,9 @@ def save():
     records = [_filter(star) for star in stars if star['id'] in new_ids]
     # add new stars
     print('creating!')
-    datasheet.records.bulk_create(records)
+    for i in range(0, len(records), 10):
+        datasheet.records.bulk_create(records[i: i + 10])
+        time.sleep(0.5)
     # delete un-stars
     print('deleting!')
     for _id in delete_ids:
