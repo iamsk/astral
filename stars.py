@@ -56,7 +56,8 @@ def save():
     for _id in delete_ids:
         record = datasheet.records.get(id=_id)
         print(record['html_url'])
-        record.delete()
+        record.deleted = True
+        record.save()
 
 
 def clean():
