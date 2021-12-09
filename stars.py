@@ -46,19 +46,26 @@ def save():
     stars = get_stars()
     star_ids = [star['id'] for star in stars]
     vika_star_ids = [star.id for star in datasheet.records.all()]
-    new_ids = set(star_ids) - set(vika_star_ids)
-    delete_ids = set(vika_star_ids) - set(star_ids)
-    records = [_filter(star) for star in stars if star['id'] in new_ids]
     # add new stars
+    new_ids = set(star_ids) - set(vika_star_ids)
+    records = [_filter(star) for star in stars if star['id'] in new_ids]
     print('creating!')
     for i in range(0, len(records), 10):
         datasheet.records.bulk_create(records[i: i + 10])
         time.sleep(0.5)
+    # update repo info
+    print('updating!')
+    for star in stars:
+        _id = star['id']
+        if _id in vika_star_ids:
+            dic = _filter(star)
+            record = datasheet.records.get(id=_id)
+            record.update(dic)
     # delete un-stars
     print('deleting!')
+    delete_ids = set(vika_star_ids) - set(star_ids)
     for _id in delete_ids:
         record = datasheet.records.get(id=_id)
-        print(record.html_url)
         record.deleted = True
         record.save()
 
