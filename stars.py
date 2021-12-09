@@ -61,6 +61,7 @@ def save():
             dic = _filter(star)
             record = datasheet.records.get(id=_id)
             record.update(dic)
+            time.sleep(0.2)  # 5 requests per second limited by vika
     # delete un-stars
     print('deleting!')
     delete_ids = set(vika_star_ids) - set(star_ids)
