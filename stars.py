@@ -58,7 +58,7 @@ def save():
     print('deleting!')
     for _id in delete_ids:
         record = datasheet.records.get(id=_id)
-        print(record['html_url'])
+        print(record.html_url)
         record.deleted = True
         record.save()
 
