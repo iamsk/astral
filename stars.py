@@ -1,6 +1,7 @@
 import json
 import time
 import requests
+from retry import retry
 from collections import Counter
 from benedict import benedict
 from vika import Vika
@@ -10,6 +11,11 @@ from conf import GITHUB_TOKEN, VIKA_TOKEN, VIKA_TABLE, GITHUB_USERNAME
 
 vika = Vika(VIKA_TOKEN)
 datasheet = vika.datasheet(VIKA_TABLE, field_key="name")
+
+
+@retry(tries=3, delay=10, backoff=5)
+def get_record(_id):
+    return datasheet.records.get(id=_id)
 
 
 def get_userid_by_name(name):
@@ -59,14 +65,14 @@ def save():
         _id = star['id']
         if _id in vika_star_ids:
             dic = _filter(star)
-            record = datasheet.records.get(id=_id)
+            record = get_record(_id)
             record.update(dic)
             time.sleep(0.2)  # 5 requests per second limited by vika
     # delete un-stars
     print('deleting!')
     delete_ids = set(vika_star_ids) - set(star_ids)
     for _id in delete_ids:
-        record = datasheet.records.get(id=_id)
+        record = get_record(_id)
         record.deleted = True
         record.save()
 
@@ -77,7 +83,7 @@ def clean():
     for k, v in cl.items():
         if v > 1:
             print(k)
-            record = datasheet.records.get(id=k)
+            record = get_record(k)
             record.delete()
 
 
@@ -89,7 +95,7 @@ def update_from_astral():
         repo_id = v['repo_id']
         print(repo_id)
         try:
-            record = datasheet.records.get(id=repo_id)
+            record = get_record(repo_id)
             record.tags = ','.join([tag['name'] for tag in v['tags']])
             record.save()
         except:
