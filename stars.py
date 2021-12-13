@@ -25,7 +25,7 @@ def get_userid_by_name(name):
 
 
 def _filter(record):
-    print(record['html_url'])
+    # print(record['html_url'])
     info = benedict(record).subset(
         keys=['name', 'description', 'html_url', 'pushed_at', 'stargazers_count', 'language',
               'id', 'created_at', 'forks_count', 'archived'])
@@ -59,15 +59,6 @@ def save():
     for i in range(0, len(records), 10):
         datasheet.records.bulk_create(records[i: i + 10])
         time.sleep(0.5)
-    # update repo info
-    print('updating!')
-    for star in stars:
-        _id = star['id']
-        if _id in vika_star_ids:
-            dic = _filter(star)
-            record = get_record(_id)
-            record.update(dic)
-            time.sleep(0.2)  # 5 requests per second limited by vika
     # delete un-stars
     print('deleting!')
     delete_ids = set(vika_star_ids) - set(star_ids)
@@ -75,6 +66,19 @@ def save():
         record = get_record(_id)
         record.deleted = True
         record.save()
+        time.sleep(0.2)
+    # update repo info
+    print('updating!')
+    for star in stars:
+        _id = star['id']
+        if _id in vika_star_ids:
+            dic = _filter(star)
+            record = get_record(_id)
+            try:
+                record.update(dic)
+            except:
+                print(_id, dic)
+            time.sleep(0.2)  # 5 requests per second limited by vika
 
 
 def clean():

@@ -1,4 +1,5 @@
 PyGithub
 python-benedict
-vika
 requests
+vika
+retry
