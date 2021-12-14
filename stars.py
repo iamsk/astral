@@ -1,8 +1,8 @@
 import json
 import time
+from collections import Counter
 import requests
 from retry import retry
-from collections import Counter
 from benedict import benedict
 from vika import Vika
 from github import Github
@@ -66,7 +66,7 @@ def save():
         record = get_record(_id)
         record.deleted = True
         record.save()
-        time.sleep(0.2)
+        time.sleep(0.5)
     # update repo info
     print('updating!')
     for star in stars:
@@ -78,7 +78,7 @@ def save():
                 record.update(dic)
             except:
                 print(_id, dic)
-            time.sleep(0.2)  # 5 requests per second limited by vika
+            time.sleep(0.5)  # 5 requests per second limited by vika
 
 
 def clean():
