@@ -63,9 +63,11 @@ def save():
     print('deleting!')
     delete_ids = set(vika_star_ids) - set(star_ids)
     for _id in delete_ids:
-        record = get_record(_id)
-        record.deleted = True
-        record.save()
+        try:
+            record = get_record(_id)
+            record.update({'deleted': True})
+        except:
+            print(_id)
         time.sleep(0.5)
     # update repo info
     print('updating!')
@@ -73,8 +75,8 @@ def save():
         _id = star['id']
         if _id in vika_star_ids:
             dic = _filter(star)
-            record = get_record(_id)
             try:
+                record = get_record(_id)
                 record.update(dic)
             except:
                 print(_id, dic)
