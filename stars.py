@@ -7,7 +7,7 @@ from benedict import benedict
 from vika import Vika
 from github import Github
 
-from conf import GITHUB_TOKEN, VIKA_TOKEN, VIKA_TABLE, GITHUB_USERNAME
+from .conf import GITHUB_TOKEN, VIKA_TOKEN, VIKA_TABLE, GITHUB_USERNAME
 
 vika = Vika(VIKA_TOKEN)
 datasheet = vika.datasheet(VIKA_TABLE, field_key="name")
