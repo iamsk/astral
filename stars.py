@@ -108,5 +108,6 @@ def update_from_astral():
             continue
 
 
-save()
-# update_from_astral()
+if __name__ == '__main__':
+    save()
+    # update_from_astral()
